@@ -36,14 +36,43 @@ namespace LacaApp.ViewModel
         #endregion
 
         #region Button
+        // Add Recipe Button
         public RelayCommand AddRecipeCommand { get; set; }
 
         private void ExecuteAddRecipeCommand()
         {
-            // Open Recipe Window
-            MessageBox.Show("New window opened");
+            RecipeWindow newWindow = new RecipeWindow();
+            newWindow.ShowDialog();
         }
 
+        // Add Ingredient Button 
+        public RelayCommand AddIngredientCommand { get; set; }
+
+        private void ExecuteAddIngredientCommand()
+        {
+            RecipeWindow newWindow = new RecipeWindow();
+            newWindow.ShowDialog();
+        }
+
+        // Product Calculation Button 
+        public RelayCommand ProductCalculationCommand { get; set; }
+
+        private void ExecuteProductCalculationCommand()
+        {
+            RecipeWindow newWindow = new RecipeWindow();
+            newWindow.ShowDialog();
+        }
+
+        // Product Calculation Button 
+        public RelayCommand IngredientCalculationCommand { get; set; }
+
+        private void ExecuteIngredientCalculationCommand()
+        {
+            RecipeWindow newWindow = new RecipeWindow();
+            newWindow.ShowDialog();
+        }
+
+        // Delete Recipe Command
         public RelayCommand<object> DeleteRecipeCommand { get; set; }
 
         private void ExecuteDeleteRecipeCommand(object item)
@@ -63,6 +92,12 @@ namespace LacaApp.ViewModel
 
             // Bind Execution to add button
             AddRecipeCommand = new RelayCommand(ExecuteAddRecipeCommand);
+
+            AddIngredientCommand = new RelayCommand(ExecuteAddIngredientCommand);
+
+            ProductCalculationCommand = new RelayCommand(ExecuteProductCalculationCommand);
+
+            IngredientCalculationCommand = new RelayCommand(ExecuteIngredientCalculationCommand);
 
             DeleteRecipeCommand = new RelayCommand<object>(ExecuteDeleteRecipeCommand);
         }
