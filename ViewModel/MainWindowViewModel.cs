@@ -9,6 +9,7 @@ namespace LacaApp.ViewModel
     /// <summary>
     /// View Model for Main Window. Here is where the functions of Buttons, Textbox happens. 
     /// This implements INotifyPropertyChanged to get notified when UI changes or vice versa.
+    /// Property recipes will contain the ListView.Items.
     /// </summary>
     public class MainWindowViewModel : INotifyPropertyChanged
     {
@@ -75,12 +76,13 @@ namespace LacaApp.ViewModel
         // Delete Recipe Command
         public RelayCommand<object> DeleteRecipeCommand { get; set; }
 
-        private void ExecuteDeleteRecipeCommand(object item)
+        private void ExecuteDeleteRecipeCommand(object recipe)
         {
-            recipes.Remove((RecipeModel)item);
+            recipes.Remove((RecipeModel)recipe);
         }
 
         #endregion
+
         #region Constructor
         public MainWindowViewModel()
         {
