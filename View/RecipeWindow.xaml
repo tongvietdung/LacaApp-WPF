@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LacaApp" xmlns:viewmodel="clr-namespace:LacaApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:RecipeWindowViewModel}"
+        xmlns:local="clr-namespace:LacaApp" xmlns:viewmodel="clr-namespace:LacaApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="RecipeWindow" Height="600" Width="1010">
     <!-- Layout of this window consists of:
@@ -25,13 +25,13 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Margin="5 5 0 5" Padding="5" FontSize="15" VerticalAlignment="Center" Text="Tên"/>
-                <TextBox Grid.Column="1" Margin="0 5 5 5" Padding="2" VerticalAlignment="Center" FontSize="13"/>
+                <TextBox Grid.Column="1" Margin="0 5 5 5" Padding="2" VerticalAlignment="Center" Text="{Binding NewRecipe.Name}" FontSize="13"/>
 
                 <TextBlock Grid.Column="2" Margin="5 5 0 5" Padding="5" FontSize="15" VerticalAlignment="Center" Text="Số lượng"/>
-                <TextBox Grid.Column="3" Margin="0 5 5 5" Padding="2" VerticalAlignment="Center" FontSize="13" MaxLength="9" PreviewTextInput="NumberValidationTextBox" />
+                <TextBox Grid.Column="3" Margin="0 5 5 5" Padding="2" VerticalAlignment="Center" Text="{Binding NewRecipe.Amount}" FontSize="13" MaxLength="9" PreviewTextInput="NumberValidationTextBox" />
 
                 <TextBlock Grid.Column="4" Margin="5 5 0 5" Padding="5" FontSize="15" VerticalAlignment="Center" Text="Giá thành"/>
-                <TextBox Grid.Column="5" Margin="0 5 5 5" Padding="2" VerticalAlignment="Center" FontSize="13" MaxLength="9" PreviewTextInput="NumberValidationTextBox" />
+                <TextBox Grid.Column="5" Margin="0 5 5 5" Padding="2" VerticalAlignment="Center" Text="{Binding NewRecipe.Price}" FontSize="13" MaxLength="9" PreviewTextInput="NumberValidationTextBox" />
             </Grid>
             
             <!-- Checkbox and add ingredient button -->
@@ -100,7 +100,7 @@
             
             <!-- Buttons -->
             <DockPanel Grid.Row="1">
-                <Button DockPanel.Dock="Right" Name="SaveButton" Margin="5" Padding="20 5 20 5" FontSize="15" Content="Lưu"/>
+                <Button DockPanel.Dock="Right" Name="SaveButton" Margin="5" Padding="20 5 20 5" Command="{Binding SaveRecipeCommand}" FontSize="15" Content="Lưu"/>
                 <Button DockPanel.Dock="Left" Name="CancelButton" Margin="5" Padding="20 5 20 5" HorizontalAlignment="Left" Command="{Binding CancelCommand}" FontSize="15" Content="Huỷ"/>
             </DockPanel>
         </Grid>

@@ -11,6 +11,7 @@ namespace LacaApp.Model
     /// <summary>
     /// Model for a Recipe
     /// </summary>
+    [Serializable]
     public class RecipeModel
     {
 
@@ -26,10 +27,9 @@ namespace LacaApp.Model
         {
         }
 
-        public RecipeModel(int index, string name)
+        public RecipeModel(string name)
         {
             Name = name;
         }
-
     }
 }

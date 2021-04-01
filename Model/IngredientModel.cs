@@ -9,6 +9,7 @@ namespace LacaApp.Model
     /// <summary>
     /// Model for an Ingredient
     /// </summary>
+    [Serializable]
     public class IngredientModel
     {
         public int Index { get; set; }

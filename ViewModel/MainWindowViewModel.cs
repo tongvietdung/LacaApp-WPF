@@ -1,73 +1,82 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LacaApp.Model;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace LacaApp.ViewModel
 {
     /// <summary>
-    /// View Model for Main Window. Here is where the functions of Buttons, Textbox happens. 
+    /// View Model for Project. Here is where the functions of Buttons, Textbox happens. 
     /// This implements INotifyPropertyChanged to get notified when UI changes or vice versa.
     /// Property recipes will contain the ListView.Items.
     /// </summary>
+    [Serializable]
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Implementation for Main window UI. 
+        /// </summary>
+        #region Main Window View Model
         // List of recipes which is the ItemsSource for ListViewItem
-        #region ObservableCollection<RecipeModel> recipes
+        #region ObservableCollection<RecipeModel> recipeModels
 
-        private ObservableCollection<RecipeModel> recipes = new ObservableCollection<RecipeModel>();
+        private ObservableCollection<RecipeModel> recipeModels;
 
-        public ObservableCollection<RecipeModel> Recipes
+        public ObservableCollection<RecipeModel> RecipeModels
         {
             get
             {
-                return recipes;
+                return recipeModels;
             }
 
             set
             {
-                if (recipes != value)
+                if (recipeModels != value)
                 {
-                    recipes = value;
-                    RaisePropertyChanged(nameof(recipes));
+                    recipeModels = value;
+                    RaisePropertyChanged(nameof(recipeModels));
                 }
             }
         }
         #endregion
 
-        #region Button
+        #region Buttons
         // Add Recipe Button
-        public RelayCommand AddRecipeCommand { get; set; }
+        public RelayCommand OpenAddRecipeWindowCommand { get; set; }
 
-        private void ExecuteAddRecipeCommand()
+        private void ExecuteOpenAddRecipeWindowCommand()
         {
             RecipeWindow newWindow = new RecipeWindow();
             newWindow.ShowDialog();
         }
 
         // Add Ingredient Button 
-        public RelayCommand AddIngredientCommand { get; set; }
+        public RelayCommand OpenAddIngredientWindowCommand { get; set; }
 
-        private void ExecuteAddIngredientCommand()
+        private void ExecuteOpenAddIngredientWindowCommand()
         {
             RecipeWindow newWindow = new RecipeWindow();
             newWindow.ShowDialog();
         }
 
         // Product Calculation Button 
-        public RelayCommand ProductCalculationCommand { get; set; }
+        public RelayCommand OpenProductCalculationWindowCommand { get; set; }
 
-        private void ExecuteProductCalculationCommand()
+        private void ExecuteOpenProductCalculationWindowCommand()
         {
             RecipeWindow newWindow = new RecipeWindow();
             newWindow.ShowDialog();
         }
 
         // Product Calculation Button 
-        public RelayCommand IngredientCalculationCommand { get; set; }
+        public RelayCommand OpenIngredientCalculationWindowCommand { get; set; }
 
-        private void ExecuteIngredientCalculationCommand()
+        private void ExecuteOpenIngredientCalculationWindowCommand()
         {
             RecipeWindow newWindow = new RecipeWindow();
             newWindow.ShowDialog();
@@ -78,31 +87,174 @@ namespace LacaApp.ViewModel
 
         private void ExecuteDeleteRecipeCommand(object recipe)
         {
-            recipes.Remove((RecipeModel)recipe);
+            recipeModels.Remove((RecipeModel)recipe);
+            Save();
         }
 
         #endregion
 
-        #region Constructor
-        public MainWindowViewModel()
+        #endregion
+
+        /*------------------------------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Implementation for Recipe window UI
+        /// </summary>
+        #region Recipe Window View Model
+        // List of ingredients which is ItemsSource for ListView
+        #region ObservableCollection<RecipeModel> ingredients
+
+        private ObservableCollection<IngredientModel> ingredients = new ObservableCollection<IngredientModel>();
+
+        public ObservableCollection<IngredientModel> Ingredients
         {
-            // Add dummy recipe list
-            for (int i = 0; i < 3; i++)
+            get
             {
-                recipes.Add(new RecipeModel(recipes.Count, "Name " + i.ToString()));
+                return ingredients;
             }
 
-            // Bind Execution to add button
-            AddRecipeCommand = new RelayCommand(ExecuteAddRecipeCommand);
+            set
+            {
+                if (ingredients != value)
+                {
+                    ingredients = value;
+                    RaisePropertyChanged(nameof(ingredients));
+                }
+            }
+        }
+        #endregion
+
+        // The recipe to be newly created, or edited.
+        #region RecipeModel newRecipe
+        private RecipeModel newRecipe = new RecipeModel();
+
+        public RecipeModel NewRecipe
+        {
+            get
+            {
+                return newRecipe;
+            }
+
+            set
+            {
+                if (newRecipe != value)
+                {
+                    newRecipe = value;
+                }
+                RaisePropertyChanged(nameof(newRecipe));
+            }
+        }
+        #endregion
+
+        #region Buttons
+        // Cancel command
+        public RelayCommand CancelCommand { get; set; }
+
+        public Action CloseWindow { get; set; }
+
+        public void ExecuteCancelCommand()
+        {
+            CloseWindow();
+        }
+
+        // Add ingredient command
+        public RelayCommand AddIngredientCommand { get; set; }
+
+        public void ExecuteAddIngredientCommand()
+        {
+            ingredients.Add(new IngredientModel());
+        }
+
+        // Delete ingredient command
+        public RelayCommand<object> DeleteIngredientCommand { get; set; }
+
+        public void ExecuteDeleteIngredientCommand(object ingredient)
+        {
+            ingredients.Remove((IngredientModel)ingredient);
+        }
+
+        // Save command
+        public RelayCommand SaveRecipeCommand { get; set; }
+
+        public void ExecuteSaveRecipeCommand()
+        {
+            newRecipe.ingredients = ingredients;
+            string res = "";
+
+            recipeModels.Add(newRecipe);
+
+            foreach(var item in recipeModels)
+            {
+                res += item.Name + " ";
+            }
+            MessageBox.Show(res);
+            CloseWindow();
+        }
+
+        #endregion
+
+        #endregion
+
+        /*------------------------------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Mutual Section
+        /// </summary>
+        #region Constructor
+        public MainWindowViewModel(Action action)
+        {
+            // Load data from file
+            Load();
+
+            #region Main Window buttons
+            OpenAddRecipeWindowCommand = new RelayCommand(ExecuteOpenAddRecipeWindowCommand);
+
+            OpenAddIngredientWindowCommand = new RelayCommand(ExecuteOpenAddIngredientWindowCommand);
+
+            OpenProductCalculationWindowCommand = new RelayCommand(ExecuteOpenProductCalculationWindowCommand);
+
+            OpenIngredientCalculationWindowCommand = new RelayCommand(ExecuteOpenIngredientCalculationWindowCommand);
+
+            DeleteRecipeCommand = new RelayCommand<object>(ExecuteDeleteRecipeCommand);
+            #endregion
+
+            for (int i = 0; i < 3; i++)
+            {
+                recipeModels.Add(new RecipeModel("name " + i));
+            }
+            CloseWindow = action;
+
+            #region Add Ingredient Window buttons
+            CancelCommand = new RelayCommand(ExecuteCancelCommand);
+
+            SaveRecipeCommand = new RelayCommand(ExecuteSaveRecipeCommand);
 
             AddIngredientCommand = new RelayCommand(ExecuteAddIngredientCommand);
 
-            ProductCalculationCommand = new RelayCommand(ExecuteProductCalculationCommand);
-
-            IngredientCalculationCommand = new RelayCommand(ExecuteIngredientCalculationCommand);
-
-            DeleteRecipeCommand = new RelayCommand<object>(ExecuteDeleteRecipeCommand);
+            DeleteIngredientCommand = new RelayCommand<object>(ExecuteDeleteIngredientCommand);
+            #endregion
         }
+
+        //public MainWindowViewModel(Action action)
+        //{
+        //    //// Load data from file
+        //    //Load();
+        //    for (int i = 0; i < 3; i++)
+        //    {
+        //        recipeModels.Add(new RecipeModel("name " + i));
+        //    }
+        //    CloseWindow = action;
+
+        //    #region Add Ingredient Window buttons
+        //    CancelCommand = new RelayCommand(ExecuteCancelCommand);
+
+        //    SaveRecipeCommand = new RelayCommand(ExecuteSaveRecipeCommand);
+
+        //    AddIngredientCommand = new RelayCommand(ExecuteAddIngredientCommand);
+
+        //    DeleteIngredientCommand = new RelayCommand<object>(ExecuteDeleteIngredientCommand);
+        //    #endregion
+        //}
         #endregion
 
         #region Property Change Notification
@@ -111,6 +263,28 @@ namespace LacaApp.ViewModel
         private void RaisePropertyChanged(string property)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+
+        #endregion
+
+        #region Save System
+        const string PATH = "C:/Users/vietd/Desktop/lacadata.txt";
+
+        static DataSerializer dataSerializer = new DataSerializer();
+
+        public void Save()
+        {
+            dataSerializer.BinarySerialize(recipeModels, PATH);
+        }
+
+        public void Load()
+        {
+            recipeModels = (ObservableCollection<RecipeModel>)dataSerializer.BinaryDeserialize(PATH);
+
+            if (recipeModels == null)
+            {
+                recipeModels = new ObservableCollection<RecipeModel>();
+            }
         }
         #endregion
     }
