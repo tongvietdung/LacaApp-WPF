@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LacaApp" xmlns:viewmodel="clr-namespace:LacaApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+        xmlns:local="clr-namespace:LacaApp" xmlns:viewmodel="clr-namespace:LacaApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
+        x:Name="This"
         Title="RecipeWindow" Height="600" Width="1010">
     <!-- Layout of this window consists of:
             1. Recipe information input: name, amount, price, use as ingredient
@@ -100,8 +101,14 @@
             
             <!-- Buttons -->
             <DockPanel Grid.Row="1">
-                <Button DockPanel.Dock="Right" Name="SaveButton" Margin="5" Padding="20 5 20 5" Command="{Binding SaveRecipeCommand}" FontSize="15" Content="Lưu"/>
-                <Button DockPanel.Dock="Left" Name="CancelButton" Margin="5" Padding="20 5 20 5" HorizontalAlignment="Left" Command="{Binding CancelCommand}" FontSize="15" Content="Huỷ"/>
+                <Button DockPanel.Dock="Right" Name="SaveButton" Margin="5" Padding="20 5 20 5"
+                        Command="{Binding SaveRecipeCommand}"
+                        CommandParameter="{Binding ElementName=This}"
+                        FontSize="15" Content="Lưu"/>
+                <Button DockPanel.Dock="Left" Name="CancelButton" Margin="5" Padding="20 5 20 5" HorizontalAlignment="Left" 
+                        Command="{Binding CancelCommand}" 
+                        CommandParameter="{Binding ElementName=This}"
+                        FontSize="15" Content="Huỷ"/>
             </DockPanel>
         </Grid>
     </DockPanel>

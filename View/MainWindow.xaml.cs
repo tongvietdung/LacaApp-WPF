@@ -14,7 +14,7 @@ namespace LacaApp
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel(null);
+            DataContext = new MainViewModel();
         }
     }
 }

@@ -18,7 +18,6 @@ namespace LacaApp
         public RecipeWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowViewModel(this.Close);
         }
 
         // Only number in textbox
