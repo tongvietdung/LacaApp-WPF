@@ -7,7 +7,7 @@
         xmlns:viewmodel="clr-namespace:LacaApp.ViewModel" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1020">
+        Title="Laca App" Height="600" Width="1020">
 
     <!--Layout of this window consists of 3 parts:
         1. Buttons.
@@ -34,9 +34,9 @@
             
             <!-- Each button in each column -->
             <Button Command="{Binding OpenAddRecipeWindowCommand}" CommandParameter="{Binding EditRecipeIndex}" Name="AddRecipeButton" Grid.Column="0" Margin="5" Padding="5" FontSize="15" Content="Thêm công thức"/>
-            <Button Command="{Binding OpenAddIngredientWindowCommand}" Name="AddIngredientButton" Grid.Column="1" Margin="5" Padding="5" FontSize="15" Content="Thêm nguyên liệu"/>
-            <Button Command="{Binding OpenProductCalculationWindowCommand}" Name="ProductCalculationButton" Grid.Column="2" Margin="5" Padding="5" FontSize="15" Content="Tính thành phẩm"/>
-            <Button Command="{Binding OpenIngredientCalculationWindowCommand}" Name="IngredientsCalculationButton" Grid.Column="3" Margin="5" Padding="5" FontSize="15" Content="Tính nguyên liệu"/>
+            <Button Command="{Binding OpenAddIngredientWindowCommand}" Name="AddIngredientButton" Grid.Column="1" Margin="5" Padding="5" FontSize="15" Content="Danh sách nguyên liệu"/>
+            <Button Command="{Binding OpenProductCalculationWindowCommand}" Name="ProductCalculationButton" Grid.Column="3" Margin="5" Padding="5" FontSize="15" Content="Tính thành phẩm"/>
+            <Button Command="{Binding OpenIngredientCalculationWindowCommand}" Name="IngredientsCalculationButton" Grid.Column="2" Margin="5" Padding="5" FontSize="15" Content="Tính nguyên liệu"/>
         </Grid>
         
         <!-- Title in 2nd row -->

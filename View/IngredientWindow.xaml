@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LacaApp.View" xmlns:viewmodel="clr-namespace:LacaApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
-        Title="IngredientWindow" Height="600" Width="1020">
+        Title="Laca App" Height="600" Width="1020">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>    
         </Grid>
         
-        <ListView Grid.Row="1" Margin="5" ItemsSource="{Binding IngredientModels}">
+        <ListView Grid.Row="1" ItemsSource="{Binding IngredientModels}">
             <ListView.View>
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>

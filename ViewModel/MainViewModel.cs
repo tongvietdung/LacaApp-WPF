@@ -13,7 +13,7 @@ namespace LacaApp.ViewModel
     /// This implements INotifyPropertyChanged to get notified when UI changes or vice versa.
     /// Property recipes will contain the ListView.Items.
     /// </summary>
-    [Serializable]
+    [Serializable()]
     public class MainViewModel : INotifyPropertyChanged
     {
         /// <summary>
@@ -24,7 +24,6 @@ namespace LacaApp.ViewModel
         #region Variables
         // List of recipes which is the ItemsSource for ListViewItem
         #region ObservableCollection<RecipeModel> recipeModels
-
         private ObservableCollection<RecipeModel> recipeModels;
 
         public ObservableCollection<RecipeModel> RecipeModels
@@ -92,7 +91,10 @@ namespace LacaApp.ViewModel
 
         private void ExecuteOpenProductCalculationWindowCommand()
         {
-            RecipeWindow newWindow = new RecipeWindow();
+            ProductCalculationWindow newWindow = new ProductCalculationWindow
+            {
+                DataContext = this
+            };
             newWindow.ShowDialog();
         }
 
@@ -101,7 +103,17 @@ namespace LacaApp.ViewModel
 
         private void ExecuteOpenIngredientCalculationWindowCommand()
         {
-            RecipeWindow newWindow = new RecipeWindow();
+            foreach (var item in RecipeModels)
+            {
+                item.IsSelected = false;
+                item.CalculateAmount = 0;
+            }
+
+            IngredientCalculationWindow newWindow = new IngredientCalculationWindow
+            {
+                DataContext = this
+            };
+
             newWindow.ShowDialog();
         }
 
@@ -173,29 +185,12 @@ namespace LacaApp.ViewModel
 
         #endregion
 
-        #region IngredientModel newIngredient
-        private IngredientModel newIngredient = new IngredientModel();
-        public IngredientModel NewIngredient
-        {
-            get
-            {
-                return newIngredient;
-            }
-
-            set
-            {
-                if (newIngredient != value)
-                {
-                    newIngredient = value;
-                    RaisePropertyChanged(nameof(newIngredient));
-                }
-            }
-        }
         #endregion
 
         #endregion
 
         #region Buttons
+
         // Cancel command
         public RelayCommand<Window> CancelCommand { get; set; }
 
@@ -210,8 +205,7 @@ namespace LacaApp.ViewModel
 
         private void ExecuteAddIngredientCommand()
         {
-            NewIngredient = new IngredientModel();
-            NewRecipe.Ingredients.Add(NewIngredient);
+            NewRecipe.Ingredients.Add(new IngredientModel());
         }
 
         // Delete ingredient command
@@ -241,17 +235,15 @@ namespace LacaApp.ViewModel
                 AddToIngredientList(item);
             }
 
-            Save();
-
             // Reset view model to reset UI
             NewRecipe = new RecipeModel();
 
             EditRecipeIndex = -1;
 
+            Save();
+
             window.Close();
         }
-
-        #endregion
 
         #endregion
 
@@ -280,6 +272,13 @@ namespace LacaApp.ViewModel
             }
         }
         #endregion
+
+        /*------------------------------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------------------------------*/
+        #region Product Calculation Window View Model
+
+        #endregion
+
 
         /*------------------------------------------------------------------------------------------------------------------------------------*/
         /*------------------------------------------------------------------------------------------------------------------------------------*/
@@ -335,7 +334,7 @@ namespace LacaApp.ViewModel
 
         public void Save()
         {
-            Object[] Data = new object[2] { RecipeModels, IngredientModels };
+            Object[] Data = new Object[2] { RecipeModels, IngredientModels };
 
             dataSerializer.BinarySerialize(Data, PATH);
         }
@@ -350,7 +349,6 @@ namespace LacaApp.ViewModel
             {
                 RecipeModels = (ObservableCollection<RecipeModel>)Data[0];
                 IngredientModels = (ObservableCollection<IngredientModel>)Data[1];
-
             }
 
             // If file empty then initiate lists

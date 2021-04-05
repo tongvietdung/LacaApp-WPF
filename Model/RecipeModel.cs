@@ -6,10 +6,9 @@ namespace LacaApp.Model
     /// <summary>
     /// Model for a Recipe
     /// </summary>
-    [Serializable]
+    [Serializable()]
     public class RecipeModel
     {
-
         public string Name { get; set; }
 
         public string Amount { get; set; }
@@ -28,5 +27,10 @@ namespace LacaApp.Model
         {
             Name = name;
         }
+
+        #region Helper variables
+        public bool IsSelected { get; set; } = false;
+        public int CalculateAmount { get; set; } = 0;
+        #endregion
     }
 }

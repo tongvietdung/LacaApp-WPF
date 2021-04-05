@@ -5,7 +5,7 @@ namespace LacaApp.Model
     /// <summary>
     /// Model for an Ingredient
     /// </summary>
-    [Serializable]
+    [Serializable()]
     public class IngredientModel
     {
         public int Index { get; set; }
