@@ -1,2 +1,2 @@
 # LacaApp-WPF
-LacaApp but ported to WPF. 
+Window ported version of Laca app
