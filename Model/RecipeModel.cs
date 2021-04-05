@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LacaApp.Model
 {
@@ -21,7 +16,9 @@ namespace LacaApp.Model
 
         public string Price { get; set; }
 
-        public ObservableCollection<IngredientModel> ingredients { get; set; } = new ObservableCollection<IngredientModel>();
+        public bool AsIngredient { get; set; } = false;
+
+        public ObservableCollection<IngredientModel> Ingredients { get; set; } = new ObservableCollection<IngredientModel>();
 
         public RecipeModel()
         {

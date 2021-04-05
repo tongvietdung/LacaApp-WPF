@@ -3,9 +3,6 @@ using LacaApp.Model;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Collections.Generic;
 using System.Windows;
 
 namespace LacaApp.ViewModel
@@ -22,6 +19,8 @@ namespace LacaApp.ViewModel
         /// Implementation for Main window UI. 
         /// </summary>
         #region Main Window View Model
+
+        #region Variables
         // List of recipes which is the ItemsSource for ListViewItem
         #region ObservableCollection<RecipeModel> recipeModels
 
@@ -45,19 +44,24 @@ namespace LacaApp.ViewModel
         }
         #endregion
 
+        #endregion
+
         #region Buttons
 
-        Action CloseWindow;
-
         // Add Recipe Window Button
-        public RelayCommand OpenAddRecipeWindowCommand { get; set; }
+        public RelayCommand<RecipeModel> OpenAddRecipeWindowCommand { get; set; }
 
-        private void ExecuteOpenAddRecipeWindowCommand()
+        public void ExecuteOpenAddRecipeWindowCommand(RecipeModel newRecipe)
         {
             RecipeWindow newWindow = new RecipeWindow
             {
                 DataContext = this
             };
+
+            if (newRecipe != null)
+            {
+                NewRecipe = newRecipe;
+            }
 
             newWindow.ShowDialog();
         }
@@ -108,6 +112,9 @@ namespace LacaApp.ViewModel
         /// Implementation for Recipe window UI
         /// </summary>
         #region Recipe Window View Model
+
+        #region Variables
+
         // List of ingredients which is ItemsSource for ListView
         #region ObservableCollection<RecipeModel> ingredients
 
@@ -150,43 +157,70 @@ namespace LacaApp.ViewModel
                 RaisePropertyChanged(nameof(newRecipe));
             }
         }
+
+        #endregion
+
+        #region IngredientModel newIngredient
+        private IngredientModel newIngredient = new IngredientModel();
+        public IngredientModel NewIngredient
+        {
+            get
+            {
+                return newIngredient;
+            }
+
+            set
+            {
+                if (newIngredient != value)
+                {
+                    newIngredient = value;
+                    RaisePropertyChanged(nameof(newIngredient));
+                }
+            }
+        }
+        #endregion
+
+        IngredientModel tempInredient;
+
         #endregion
 
         #region Buttons
         // Cancel command
         public RelayCommand<Window> CancelCommand { get; set; }
 
-        public void ExecuteCancelCommand(Window window)
+        private void ExecuteCancelCommand(Window window)
         {
+            NewRecipe = new RecipeModel();
             window.Close();
         }
 
         // Add ingredient command
         public RelayCommand AddIngredientCommand { get; set; }
 
-        public void ExecuteAddIngredientCommand()
+        private void ExecuteAddIngredientCommand()
         {
-            Ingredients.Add(new IngredientModel());
+            NewIngredient = new IngredientModel();
+            NewRecipe.Ingredients.Add(NewIngredient);
         }
 
         // Delete ingredient command
         public RelayCommand<object> DeleteIngredientCommand { get; set; }
 
-        public void ExecuteDeleteIngredientCommand(object ingredient)
+        private void ExecuteDeleteIngredientCommand(object ingredient)
         {
-            Ingredients.Remove((IngredientModel)ingredient);
+            NewRecipe.Ingredients.Remove((IngredientModel)ingredient);
         }
 
         // Save command
         public RelayCommand<Window> SaveRecipeCommand { get; set; }
 
-        public void ExecuteSaveRecipeCommand(Window window)
+        private void ExecuteSaveRecipeCommand(Window window)
         {
-            NewRecipe.ingredients = Ingredients;
-
             RecipeModels.Add(NewRecipe);
 
             Save();
+
+            NewRecipe = new RecipeModel();
 
             window.Close();
         }
@@ -207,7 +241,7 @@ namespace LacaApp.ViewModel
             Load();
 
             #region Main Window buttons
-            OpenAddRecipeWindowCommand = new RelayCommand(ExecuteOpenAddRecipeWindowCommand);
+            OpenAddRecipeWindowCommand = new RelayCommand<RecipeModel>(ExecuteOpenAddRecipeWindowCommand);
 
             OpenAddIngredientWindowCommand = new RelayCommand(ExecuteOpenAddIngredientWindowCommand);
 
@@ -227,6 +261,7 @@ namespace LacaApp.ViewModel
 
             DeleteIngredientCommand = new RelayCommand<object>(ExecuteDeleteIngredientCommand);
             #endregion
+
         }
 
         #endregion
@@ -261,5 +296,6 @@ namespace LacaApp.ViewModel
             }
         }
         #endregion
+
     }
 }
