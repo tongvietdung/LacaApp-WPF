@@ -18,7 +18,7 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <ListView x:Name="Datalist" Grid.Column="0" ItemsSource="{Binding RecipeModels}">
+            <ListView Grid.Column="0" ItemsSource="{Binding RecipeModels}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -33,14 +33,36 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
-                            <CheckBox Grid.Column="0" FontSize="15" VerticalAlignment="Top" Content="{Binding Name}"/>
+                            <CheckBox Grid.Column="0" FontSize="15" VerticalAlignment="Top" IsChecked="{Binding IsSelected}" Content="{Binding Name}"/>
                             <TextBox Grid.Column="1" Margin="5" Padding="5" PreviewTextInput="NumberValidationTextBox" FontSize="15" Text="{Binding CalculateAmount}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <ListView Grid.Column="1" ItemsSource="{Binding Result}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Margin="5" Padding="5" FontSize="15" Text="{Binding Key}"/>
+                            <TextBlock Grid.Column="1" Margin="5" Padding="5" FontSize="15" Text="{Binding Value}"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
         
-        <Button Grid.Row="1" Margin="5" Padding="10" HorizontalAlignment="Center" FontSize="15" Content="Tính nguyên liệu"/>
+        <Button Command="{Binding CalculateIngredientCommand}" Grid.Row="1" Margin="5" Padding="10" HorizontalAlignment="Center" FontSize="15" Content="Tính nguyên liệu"/>
     </Grid>
 </Window>

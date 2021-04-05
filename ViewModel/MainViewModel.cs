@@ -2,6 +2,7 @@
 using LacaApp.Model;
 using LacaApp.View;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -103,6 +104,7 @@ namespace LacaApp.ViewModel
 
         private void ExecuteOpenIngredientCalculationWindowCommand()
         {
+            // Reset state when open new window
             foreach (var item in RecipeModels)
             {
                 item.IsSelected = false;
@@ -186,9 +188,7 @@ namespace LacaApp.ViewModel
         #endregion
 
         #endregion
-
-        #endregion
-
+       
         #region Buttons
 
         // Cancel command
@@ -247,6 +247,7 @@ namespace LacaApp.ViewModel
 
         #endregion
 
+        #endregion
 
         /*------------------------------------------------------------------------------------------------------------------------------------*/
         /*------------------------------------------------------------------------------------------------------------------------------------*/
@@ -276,6 +277,24 @@ namespace LacaApp.ViewModel
         /*------------------------------------------------------------------------------------------------------------------------------------*/
         /*------------------------------------------------------------------------------------------------------------------------------------*/
         #region Product Calculation Window View Model
+
+        #region Variable
+        #endregion
+
+        #region Button
+        public RelayCommand CalculateIngredientCommand { get; set; }
+        private void ExecuteCalculateIngredientCommand()
+        {
+            foreach (var recipe in RecipeModels)
+            {
+                if (recipe.IsSelected)
+                {
+
+                }
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -313,6 +332,9 @@ namespace LacaApp.ViewModel
             DeleteIngredientCommand = new RelayCommand<object>(ExecuteDeleteIngredientCommand);
             #endregion
 
+            #region Ingredient Calculation Window Button
+            CalculateIngredientCommand = new RelayCommand(ExecuteCalculateIngredientCommand);
+            #endregion
         }
 
         #endregion
