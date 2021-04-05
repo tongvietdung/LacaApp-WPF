@@ -44,23 +44,30 @@ namespace LacaApp.ViewModel
         }
         #endregion
 
+        // To control when adding new recipe and when editing existed one
+        // < 0 : add new
+        // >= 0 : edit
+        public int EditRecipeIndex { get; set; } = -1;
+
         #endregion
 
         #region Buttons
 
         // Add Recipe Window Button
-        public RelayCommand<RecipeModel> OpenAddRecipeWindowCommand { get; set; }
+        public RelayCommand<int> OpenAddRecipeWindowCommand { get; set; }
 
-        public void ExecuteOpenAddRecipeWindowCommand(RecipeModel newRecipe)
+        public void ExecuteOpenAddRecipeWindowCommand(int recipeIndex)
         {
             RecipeWindow newWindow = new RecipeWindow
             {
                 DataContext = this
             };
 
-            if (newRecipe != null)
+            // If >=0 then editing existed recipe
+            if (recipeIndex >= 0)
             {
-                NewRecipe = newRecipe;
+                NewRecipe = RecipeModels[recipeIndex];
+                EditRecipeIndex = recipeIndex;
             }
 
             newWindow.ShowDialog();
@@ -99,6 +106,7 @@ namespace LacaApp.ViewModel
         private void ExecuteDeleteRecipeCommand(object recipe)
         {
             RecipeModels.Remove((RecipeModel)recipe);
+            EditRecipeIndex = -1;
             Save();
         }
 
@@ -180,8 +188,6 @@ namespace LacaApp.ViewModel
         }
         #endregion
 
-        IngredientModel tempInredient;
-
         #endregion
 
         #region Buttons
@@ -216,11 +222,21 @@ namespace LacaApp.ViewModel
 
         private void ExecuteSaveRecipeCommand(Window window)
         {
-            RecipeModels.Add(NewRecipe);
+            // If new recipe (meaning EditRecipeIndex < 0) then add to list
+            if (EditRecipeIndex < 0)
+            {
+                RecipeModels.Add(NewRecipe);
+            } else // replacing old with new recipe
+            {
+                RecipeModels[EditRecipeIndex] = NewRecipe;
+            }
 
             Save();
 
+            // Reset view model to reset UI
             NewRecipe = new RecipeModel();
+
+            EditRecipeIndex = -1;
 
             window.Close();
         }
@@ -241,7 +257,7 @@ namespace LacaApp.ViewModel
             Load();
 
             #region Main Window buttons
-            OpenAddRecipeWindowCommand = new RelayCommand<RecipeModel>(ExecuteOpenAddRecipeWindowCommand);
+            OpenAddRecipeWindowCommand = new RelayCommand<int>(ExecuteOpenAddRecipeWindowCommand);
 
             OpenAddIngredientWindowCommand = new RelayCommand(ExecuteOpenAddIngredientWindowCommand);
 

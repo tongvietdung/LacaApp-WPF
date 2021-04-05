@@ -21,7 +21,7 @@ namespace LacaApp
         // Double click handler to edit recipe
         private void ListViewItem_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            vm.ExecuteOpenAddRecipeWindowCommand(vm.RecipeModels[RecipeList.SelectedIndex]);
+            vm.ExecuteOpenAddRecipeWindowCommand(RecipeList.SelectedIndex);
         }
     }
 }
