@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LacaApp" xmlns:viewmodel="clr-namespace:LacaApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
         x:Name="This"
-        Title="RecipeWindow" Height="600" Width="1010">
+        Title="RecipeWindow" Height="600" Width="1020">
 
     <!-- Layout of this window consists of:
             1. Recipe information input: name, amount, price, use as ingredient
@@ -55,7 +55,7 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <ListView Name="IngredientList" ItemsSource="{Binding NewRecipe.Ingredients}" Grid.Row="0" Margin="5" >
+            <ListView Name="RecipeIngredientList" ItemsSource="{Binding NewRecipe.Ingredients}" Grid.Row="0" Margin="5" >
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

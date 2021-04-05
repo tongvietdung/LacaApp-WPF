@@ -7,7 +7,7 @@
         xmlns:viewmodel="clr-namespace:LacaApp.ViewModel" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1010">
+        Title="MainWindow" Height="600" Width="1020">
 
     <!--Layout of this window consists of 3 parts:
         1. Buttons.

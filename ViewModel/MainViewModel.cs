@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LacaApp.Model;
+using LacaApp.View;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -78,7 +79,11 @@ namespace LacaApp.ViewModel
 
         private void ExecuteOpenAddIngredientWindowCommand()
         {
-            RecipeWindow newWindow = new RecipeWindow();
+            IngredientWindow newWindow = new IngredientWindow
+            {
+                DataContext = this
+            };
+
             newWindow.ShowDialog();
         }
 
@@ -231,6 +236,11 @@ namespace LacaApp.ViewModel
                 RecipeModels[EditRecipeIndex] = NewRecipe;
             }
 
+            foreach (IngredientModel item in NewRecipe.Ingredients)
+            {
+                AddToIngredientList(item);
+            }
+
             Save();
 
             // Reset view model to reset UI
@@ -243,6 +253,32 @@ namespace LacaApp.ViewModel
 
         #endregion
 
+        #endregion
+
+
+        /*------------------------------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Implementation for Ingredient window UI
+        /// </summary>
+        #region Ingredient Window View Model
+        private ObservableCollection<IngredientModel> ingredientModels = new ObservableCollection<IngredientModel>();
+        public ObservableCollection<IngredientModel>  IngredientModels
+        {
+            get
+            {
+                return ingredientModels;
+            }
+
+            set
+            {
+                if (ingredientModels != value)
+                {
+                    ingredientModels = value;
+                    RaisePropertyChanged(nameof(ingredientModels));
+                }
+            }
+        }
         #endregion
 
         /*------------------------------------------------------------------------------------------------------------------------------------*/
@@ -299,19 +335,56 @@ namespace LacaApp.ViewModel
 
         public void Save()
         {
-            dataSerializer.BinarySerialize(recipeModels, PATH);
+            Object[] Data = new object[2] { RecipeModels, IngredientModels };
+
+            dataSerializer.BinarySerialize(Data, PATH);
         }
 
         public void Load()
         {
-            recipeModels = (ObservableCollection<RecipeModel>)dataSerializer.BinaryDeserialize(PATH);
+            // Deserialize data from file
+            Object[] Data = (Object[])dataSerializer.BinaryDeserialize(PATH);
 
-            if (recipeModels == null)
+            // Get the lists
+            if (Data != null)
             {
-                recipeModels = new ObservableCollection<RecipeModel>();
+                RecipeModels = (ObservableCollection<RecipeModel>)Data[0];
+                IngredientModels = (ObservableCollection<IngredientModel>)Data[1];
+
+            }
+
+            // If file empty then initiate lists
+            if (RecipeModels == null)
+            {
+                RecipeModels = new ObservableCollection<RecipeModel>();
+            }
+
+            if (IngredientModels == null)
+            {
+                IngredientModels = new ObservableCollection<IngredientModel>();
             }
         }
         #endregion
 
+        #region Helper 
+        private void AddToIngredientList(IngredientModel ingredientModel)
+        {
+            bool existed = false;
+            foreach (var item in IngredientModels)
+            {
+                if (item.Name.Equals(ingredientModel.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    existed = true;
+                    break;
+                }
+            }
+
+            if (!existed)
+            {
+                IngredientModels.Add(ingredientModel);
+            }
+        }
+
+        #endregion
     }
 }
