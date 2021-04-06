@@ -22,5 +22,11 @@ namespace LacaApp.Model
         {
 
         }
+
+        public IngredientModel(string name, int amount)
+        {
+            Name = name;
+            Amount = amount;
+        }
     }
 }

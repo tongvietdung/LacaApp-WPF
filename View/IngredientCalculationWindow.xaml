@@ -55,8 +55,8 @@
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Margin="5" Padding="5" FontSize="15" Text="{Binding Key}"/>
-                            <TextBlock Grid.Column="1" Margin="5" Padding="5" FontSize="15" Text="{Binding Value}"/>
+                            <TextBlock Grid.Column="0" Margin="5" Padding="5" FontSize="15" Text="{Binding Name}"/>
+                            <TextBlock Grid.Column="1" Margin="5" Padding="5" FontSize="15" Text="{Binding Amount}"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

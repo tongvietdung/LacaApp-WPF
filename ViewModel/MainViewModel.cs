@@ -279,17 +279,46 @@ namespace LacaApp.ViewModel
         #region Product Calculation Window View Model
 
         #region Variable
+        private ObservableCollection<IngredientModel> result { get; set; } = new ObservableCollection<IngredientModel>();
+        public ObservableCollection<IngredientModel> Result
+        {
+            get
+            {
+                return result;
+            }
+
+            set
+            {
+                if (result != value)
+                {
+                    result = value;
+                }
+                RaisePropertyChanged(nameof(result));
+            }
+        }
         #endregion
 
         #region Button
         public RelayCommand CalculateIngredientCommand { get; set; }
         private void ExecuteCalculateIngredientCommand()
         {
+            Result = new ObservableCollection<IngredientModel>();
+
             foreach (var recipe in RecipeModels)
             {
                 if (recipe.IsSelected)
                 {
+                    foreach (var ingredient in recipe.Ingredients)
+                    {
+                        int index = Contains(Result, ingredient.Name);
 
+                        if (index >= 0) {
+                            Result[index].Amount += ingredient.Amount * recipe.CalculateAmount;
+                        } else
+                        {
+                            Result.Add(new IngredientModel(ingredient.Name, ingredient.Amount * recipe.CalculateAmount));
+                        }
+                    }
                 }
             }
         }
@@ -307,6 +336,7 @@ namespace LacaApp.ViewModel
         #region Constructor
         public MainViewModel()
         {
+            PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/lacadata.txt";
             // Load data from file
             Load();
 
@@ -350,7 +380,8 @@ namespace LacaApp.ViewModel
         #endregion
 
         #region Save System
-        const string PATH = "C:/Users/vietd/Desktop/lacadata.txt";
+
+        string PATH;
 
         static DataSerializer dataSerializer = new DataSerializer();
 
@@ -405,6 +436,21 @@ namespace LacaApp.ViewModel
             }
         }
 
+        private int Contains(ObservableCollection<IngredientModel> result, string name)
+        {
+            int index = -1;
+
+            foreach (var item in result)
+            {
+                if (name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    index = result.IndexOf(item);
+                    break;
+                }
+            }
+
+            return index;
+        }
         #endregion
     }
 }
