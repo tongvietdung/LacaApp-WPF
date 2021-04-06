@@ -59,7 +59,7 @@ namespace LacaApp.ViewModel
 
         public void ExecuteOpenAddRecipeWindowCommand(int recipeIndex)
         {
-            RecipeWindow newWindow = new RecipeWindow
+            RecipeWindow newWindow = new RecipeWindow(this)
             {
                 DataContext = this
             };
@@ -336,7 +336,7 @@ namespace LacaApp.ViewModel
         #region Constructor
         public MainViewModel()
         {
-            PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/lacadata.txt";
+            PATH = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/lacadata.txt";
             // Load data from file
             Load();
 

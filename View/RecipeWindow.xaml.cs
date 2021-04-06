@@ -15,9 +15,12 @@ namespace LacaApp
     /// </summary>
     public partial class RecipeWindow : Window
     {
-        public RecipeWindow()
+        MainViewModel vm;
+
+        public RecipeWindow(MainViewModel viewModel)
         {
             InitializeComponent();
+            vm = viewModel;
         }
 
         // Only number in textbox
@@ -25,6 +28,13 @@ namespace LacaApp
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        // Reset state when open new recipe window
+        private void This_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            vm.EditRecipeIndex = -1;
+            vm.NewRecipe = new RecipeModel();
         }
     }
 }
